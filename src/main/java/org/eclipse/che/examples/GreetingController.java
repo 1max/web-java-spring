@@ -112,6 +112,7 @@ public class GreetingController implements Controller
         catch (IOException ex)
         {
             //om-nom-nom
+            return null;
         }
     }
 }
