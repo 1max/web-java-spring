@@ -89,7 +89,7 @@ public class GreetingController implements Controller
 
     }
 
-    private String getLastMessageText() {
+    private String getLastMessageText() throws Exception{
         URL url = new URL("https://api.telegram.org/bot212564900:AAHoP3sQR4huAlIFegZh6h-EqFEJssmPCnM/getupdates");
         try (InputStream is = url.openStream()) {
              JsonReader rdr = Json.createReader(is);
