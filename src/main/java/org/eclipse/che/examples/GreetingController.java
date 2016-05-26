@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import javax.json.*;
-import org.json.JSONObject;
 
 public class GreetingController implements Controller
 {
@@ -91,7 +90,8 @@ public class GreetingController implements Controller
     }
 
     private String getLastMessageText(String jb) throws Exception{
-        JSONObject obj = JSONObject.fromObject(jb);
+        JsonReader rdr = Json.createReader(new StringReader(jb));
+        JsonObject obj = rdr.readObject();
         JsonArray results = obj.getJsonArray("result");
 
         return results.getJsonObject(results.size() - 1).getJsonObject("message").getJsonString("text").getString();
