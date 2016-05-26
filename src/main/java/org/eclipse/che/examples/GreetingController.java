@@ -12,7 +12,6 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import javax.json.*;
-import java.net.MalformedURLException;
 
 public class GreetingController implements Controller
 {
@@ -89,14 +88,15 @@ public class GreetingController implements Controller
 
     }
 
-    private String getLastMessageText() throws Exception {
+    private String getLastMessageText() {
         URL url = new URL("https://api.telegram.org/bot212564900:AAHoP3sQR4huAlIFegZh6h-EqFEJssmPCnM/getupdates");
-        try (InputStream is = url.openStream();
-             JsonReader rdr = Json.createReader(is)) {
+        try (InputStream is = url.openStream()) {
+             JsonReader rdr = Json.createReader(is);
             JsonObject obj = rdr.readObject();
             JsonArray results = obj.getJsonArray("result");
 
             return results.getJsonObject(results.size() - 1).getJsonObject("message").getJsonString("text").getString();
             }
+        
     }
 }
