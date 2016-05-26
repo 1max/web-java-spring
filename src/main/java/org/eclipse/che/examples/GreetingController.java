@@ -32,7 +32,7 @@ public class GreetingController implements Controller
       System.out.println("TESTTESTTESTTEST " + jb.toString());  
       
       
-      sendPost(getLastMessageText());
+      sendPost(getLastMessageText(jb.toString()));
 
       String userName = request.getParameter("user");
       String result = "";
@@ -89,15 +89,10 @@ public class GreetingController implements Controller
 
     }
 
-    private String getLastMessageText() throws Exception{
-        URL url = new URL("https://api.telegram.org/bot212564900:AAHoP3sQR4huAlIFegZh6h-EqFEJssmPCnM/getupdates");
-        try (InputStream is = url.openStream()) {
-             JsonReader rdr = Json.createReader(is);
-            JsonObject obj = rdr.readObject();
-            JsonArray results = obj.getJsonArray("result");
+    private String getLastMessageText(String jb) throws Exception{
+        JSONObject obj = JSONObject.fromObject(jb);
+        JsonArray results = obj.getJsonArray("result");
 
-            return results.getJsonObject(results.size() - 1).getJsonObject("message").getJsonString("text").getString();
-            }
-        
+        return results.getJsonObject(results.size() - 1).getJsonObject("message").getJsonString("text").getString();
     }
 }
