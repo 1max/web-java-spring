@@ -13,7 +13,7 @@ public class GreetingController implements Controller
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
    {
        while (request.getParameterNames().hasMoreElements()){
-           System.out.println("TESTTESTTESTTEST" + request.getParameterNames().nextElement());
+         System.out.println("TESTTESTTESTTEST" + request.getParameterNames().nextElement());
        }
       String userName = request.getParameter("user");
       String result = "";
