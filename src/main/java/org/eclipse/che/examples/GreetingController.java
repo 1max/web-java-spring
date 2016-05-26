@@ -11,17 +11,8 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import javax.json.*;
+import java.net.MalformedURLException;
 
 public class GreetingController implements Controller
 {
@@ -98,25 +89,14 @@ public class GreetingController implements Controller
 
     }
 
-    private String getLastMessageText() {
+    private String getLastMessageText() throws Exception {
         URL url = new URL("https://api.telegram.org/bot212564900:AAHoP3sQR4huAlIFegZh6h-EqFEJssmPCnM/getupdates");
-        InputStream is = url.openStream();
-        try {
-            is = url.openStream();
-            JsonReader rdr = Json.createReader(is);
+        try (InputStream is = url.openStream();
+             JsonReader rdr = Json.createReader(is)) {
             JsonObject obj = rdr.readObject();
             JsonArray results = obj.getJsonArray("result");
 
             return results.getJsonObject(results.size() - 1).getJsonObject("message").getJsonString("text").getString();
-        }
-        catch (IOException ex)
-        {
-            //om-nom-nom
-            return null;
-        } finally {
-            if (is != null){
-                is.close();
             }
-        }
     }
 }
