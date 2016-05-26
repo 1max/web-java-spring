@@ -5,6 +5,7 @@ import org.springframework.web.servlet.mvc.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 
 public class GreetingController implements Controller
 {
@@ -12,9 +13,16 @@ public class GreetingController implements Controller
    @Override
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
    {
-       while (request.getParameterNames().hasMoreElements()){
-         System.out.println("TESTTESTTESTTEST" + request.getParameterNames().nextElement());
-       }
+      StringBuffer jb = new StringBuffer();
+      String line = null;
+      try {
+        BufferedReader reader = request.getReader();
+        while ((line = reader.readLine()) != null)
+          jb.append(line);
+      } catch (Exception e) { /*report an error*/ }
+  
+      System.out.println("TESTTESTTESTTEST " + jb.toString());        
+
       String userName = request.getParameter("user");
       String result = "";
       if (userName != null)
