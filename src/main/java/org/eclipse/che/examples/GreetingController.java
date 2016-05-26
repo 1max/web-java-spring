@@ -12,7 +12,7 @@ public class GreetingController implements Controller
    @Override
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
    {
-      System.out.println("TESTTESTTESTTEST" + request.getQueryString());
+      System.out.println("TESTTESTTESTTEST" + request.getParameterNames());
       String userName = request.getParameter("user");
       String result = "";
       if (userName != null)
