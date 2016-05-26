@@ -99,20 +99,24 @@ public class GreetingController implements Controller
     }
 
     private String getLastMessageText() {
-        try {
         URL url = new URL("https://api.telegram.org/bot212564900:AAHoP3sQR4huAlIFegZh6h-EqFEJssmPCnM/getupdates");
-        try (InputStream is = url.openStream();
-             JsonReader rdr = Json.createReader(is)) {
+        InputStream is = url.openStream();
+        try {
+            is = url.openStream();
+            JsonReader rdr = Json.createReader(is);
             JsonObject obj = rdr.readObject();
             JsonArray results = obj.getJsonArray("result");
 
             return results.getJsonObject(results.size() - 1).getJsonObject("message").getJsonString("text").getString();
-            }
         }
         catch (IOException ex)
         {
             //om-nom-nom
             return null;
+        } finally {
+            if (is != null){
+                is.close();
+            }
         }
     }
 }
