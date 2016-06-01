@@ -99,7 +99,7 @@ public class GreetingController implements Controller
         System.out.println("TESTTESTTESTTEST " + rdr);
         JsonObject obj = rdr.readObject();
         System.out.println("TESTTESTTESTTEST " + obj);
-        System.out.println("TESTTESTTESTTEST result" + obj.getJsonObject("result"));
+        System.out.println("TESTTESTTESTTEST message " + obj.getJsonObject("message"));
         JsonArray results = obj.getJsonArray("result");
         System.out.println("TESTTESTTESTTEST " + results);
         
