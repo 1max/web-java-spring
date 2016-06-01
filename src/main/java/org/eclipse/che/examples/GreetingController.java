@@ -9,19 +9,38 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import javax.json.*;
 import java.io.StringReader;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import org.eclipse.che.examples.IvonaCredentials;
+
+import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.ivona.services.tts.IvonaSpeechCloudClient;
+import com.ivona.services.tts.model.CreateSpeechRequest;
+import com.ivona.services.tts.model.CreateSpeechResult;
+import com.ivona.services.tts.model.Input;
+import com.ivona.services.tts.model.Voice;
 
 public class GreetingController implements Controller
 {
    private final String USER_AGENT = "Mozilla/5.0";
+   
+   private static IvonaSpeechCloudClient speechCloud;
+   
+    private static void initIvona() {
+        speechCloud = new IvonaSpeechCloudClient(new IvonaCredentials("3v8M2zbWQwuSFfGypJ2KJLWPLhwDBMIzASMMI50a", "GDNAINV33UU2ZPABUIIQ"));
+        speechCloud.setEndpoint("https://tts.eu-west-1.ivonacloud.com");
+    }
 
    @Override
    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
    {
+      
       StringBuffer jb = new StringBuffer();
       String line = null;
       try {
@@ -30,23 +49,36 @@ public class GreetingController implements Controller
           jb.append(line);
       } catch (Exception e) { /*report an error*/ }
          
-      String x = "x";
+      String lastMessage = "something wrong with message parsing";
       try{
-          x = getLastMessageText(jb.toString());
-      } catch (Exception e){
+          lastMessage = getLastMessageText(jb.toString());
+          initIvona();
+          
+          CreateSpeechRequest createSpeechRequest = new CreateSpeechRequest();
+          Input input = new Input();
+          Voice voice = new Voice();
+    
+          voice.setName("Salli");
+          input.setData("This is a sample text to be synthesized.");
+    
+          createSpeechRequest.setInput(input);
+          createSpeechRequest.setVoice(voice);
+          InputStream in = null;
+          FileOutputStream outputStream = null;
+          CreateSpeechResult createSpeechResult = speechCloud.createSpeech(createSpeechRequest);
 
-      }
-      sendPost(x);
+          System.out.println("\nSuccess sending request:");
+          System.out.println(" content type:\t" + createSpeechResult.getContentType());
+          System.out.println(" request id:\t" + createSpeechResult.getTtsRequestId());
+          System.out.println(" request chars:\t" + createSpeechResult.getTtsRequestCharacters());
+          System.out.println(" request units:\t" + createSpeechResult.getTtsRequestUnits());
+                    
+      } catch (Exception e){      }
+      sendPost(lastMessage);
 
-      String userName = request.getParameter("user");
-      String result = "";
-      if (userName != null)
-      {
-        result = "Hello, " + userName + "!";
-      }
 
       ModelAndView view = new ModelAndView("hello_view");
-      view.addObject("greeting", result);
+      view.addObject("greeting", "result");
       return view;
    }
    
@@ -64,7 +96,6 @@ public class GreetingController implements Controller
         con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
         String urlParameters = "chat_id=223196617&text=New%20Message!%20" + prefixMessage;
-
 
         // Send post request
         con.setDoOutput(true);
@@ -96,8 +127,6 @@ public class GreetingController implements Controller
     private String getLastMessageText(String jb) throws Exception{
         JsonReader rdr = Json.createReader(new StringReader(jb));
         JsonObject obj = rdr.readObject();
-        System.out.println("TESTTESTTESTTEST message " + obj.getJsonObject("message").getJsonString("text"));
-
         return obj.getJsonObject("message").getJsonString("text").getString();
     }
 }
