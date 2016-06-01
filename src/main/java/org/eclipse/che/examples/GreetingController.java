@@ -34,7 +34,7 @@ public class GreetingController implements Controller
       try{
           getLastMessageText(jb.toString());
       } catch (Exception e){
-          System.out.println("TESTTESTTESTTEST " + e.getMessage());
+          System.out.println("TESTTESTTESTTEST " + e);
       }
       sendPost("TTT");
 
