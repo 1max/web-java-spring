@@ -32,8 +32,8 @@ public class GreetingController implements Controller
   
       System.out.println("TESTTESTTESTTEST " + jb.toString());  
       
-      
-      sendPost(getLastMessageText(jb.toString()));
+      //getLastMessageText(jb.toString())
+      sendPost("TTT");
 
       String userName = request.getParameter("user");
       String result = "";
