@@ -34,7 +34,7 @@ public class GreetingController implements Controller
       try{
           getLastMessageText(jb.toString());
       } catch (Exception e){
-          System.out.println("TESTTESTTESTTEST " + e);
+
       }
       sendPost("TTT");
 
@@ -94,10 +94,17 @@ public class GreetingController implements Controller
     }
 
     private String getLastMessageText(String jb) throws Exception{
+        System.out.println("TESTTESTTESTTEST " + new StringReader(jb));
         JsonReader rdr = Json.createReader(new StringReader(jb));
+        System.out.println("TESTTESTTESTTEST " + rdr);
         JsonObject obj = rdr.readObject();
+        System.out.println("TESTTESTTESTTEST " + obj);
         JsonArray results = obj.getJsonArray("result");
-
+        System.out.println("TESTTESTTESTTEST " + results);
+        
+        System.out.println("TESTTESTTESTTEST " + results.getJsonObject(results.size() - 1));
+        System.out.println("TESTTESTTESTTEST " + results.getJsonObject(results.size() - 1).getJsonObject("message"));
+        System.out.println("TESTTESTTESTTEST TEXT" + obj.getJsonObject("result").getJsonObject("text"));
         return results.getJsonObject(results.size() - 1).getJsonObject("message").getJsonString("text").getString();
     }
 }
