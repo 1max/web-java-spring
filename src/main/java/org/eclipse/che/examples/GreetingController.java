@@ -30,13 +30,13 @@ public class GreetingController implements Controller
           jb.append(line);
       } catch (Exception e) { /*report an error*/ }
          
-      
+      String x = "x";
       try{
-          getLastMessageText(jb.toString());
+          x = getLastMessageText(jb.toString());
       } catch (Exception e){
 
       }
-      sendPost("TTT");
+      sendPost(x);
 
       String userName = request.getParameter("user");
       String result = "";
@@ -94,18 +94,10 @@ public class GreetingController implements Controller
     }
 
     private String getLastMessageText(String jb) throws Exception{
-        System.out.println("TESTTESTTESTTEST " + new StringReader(jb));
         JsonReader rdr = Json.createReader(new StringReader(jb));
-        System.out.println("TESTTESTTESTTEST " + rdr);
         JsonObject obj = rdr.readObject();
-        System.out.println("TESTTESTTESTTEST " + obj);
         System.out.println("TESTTESTTESTTEST message " + obj.getJsonObject("message").getJsonString("text"));
-        JsonArray results = obj.getJsonArray("result");
-        System.out.println("TESTTESTTESTTEST " + results);
-        
-        System.out.println("TESTTESTTESTTEST " + results.getJsonObject(results.size() - 1));
-        System.out.println("TESTTESTTESTTEST " + results.getJsonObject(results.size() - 1).getJsonObject("message"));
 
-        return results.getJsonObject(results.size() - 1).getJsonObject("message").getJsonString("text").getString();
+        return obj.getJsonObject("message").getJsonString("text").getString();
     }
 }
