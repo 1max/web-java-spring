@@ -29,10 +29,13 @@ public class GreetingController implements Controller
         while ((line = reader.readLine()) != null)
           jb.append(line);
       } catch (Exception e) { /*report an error*/ }
-  
-      System.out.println("TESTTESTTESTTEST " + jb.toString());  
+         
       
-      //getLastMessageText(jb.toString())
+      try{
+          getLastMessageText(jb.toString());
+      } catch (Exception e){
+          System.out.println("TESTTESTTESTTEST " + e.getMessage());
+      }
       sendPost("TTT");
 
       String userName = request.getParameter("user");
