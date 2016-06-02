@@ -95,7 +95,7 @@ public class GreetingController implements Controller
         con.setRequestProperty("User-Agent", USER_AGENT);
         con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-        String urlParameters = "chat_id=223196617&text=New%20Message!%20" + prefixMessage;
+        String urlParameters = "chat_id=223196617&text=" + prefixMessage;
 
         // Send post request
         con.setDoOutput(true);
